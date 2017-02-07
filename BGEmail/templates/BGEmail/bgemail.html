@@ -115,10 +115,10 @@
                 //         }
                 //     }
                 // });
+                $('#send').attr('disabled',true);
                 var data = $('#EmailForm').serialize();
                 var jsonObj = conveterParamsToJson(data);
                 socket.send(JSON.stringify(jsonObj));
-                $('#send').attr('disabled',true);
             });
         });
     </script>
