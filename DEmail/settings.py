@@ -135,5 +135,5 @@ EMAIL_USE_TLS = False
 EMAIL_HOST = 'smtp.sina.com'
 EMAIL_PORT = 25
 EMAIL_HOST_USER = 'freeniceservice@sina.com'
-EMAIL_HOST_PASSWORD = 'wearefree'
+EMAIL_HOST_PASSWORD = 'xxxxx'
 DEFAULT_FROM_EMAIL = 'freeniceservice@sina.com'
