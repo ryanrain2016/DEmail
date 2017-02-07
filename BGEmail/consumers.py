@@ -11,7 +11,7 @@ def sendEmail(message):
     auth_password = message.content.get('auth_password',settings.EMAIL_HOST_PASSWORD)
     html_message = message.content.get('html_message',None)
     try:
-        send_mail(
+        send_mass_mail(
             subject,
             content,
             from_email,
