@@ -70,18 +70,55 @@
                 xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
             }
         });
+        function escape(html){
+            html = html.replace(/\+/g," ");
+            html = decodeURIComponent(html);
+            return html
+        }
+        function conveterParamsToJson(paramsAndValues) {  
+            var jsonObj = {};
+            var param = paramsAndValues.split("&");  
+            for ( var i = 0; param != null && i < param.length; i++) {  
+                var para = param[i].split("=");  
+                jsonObj[para[0]] = escape(para[1]);  
+            }
+            return jsonObj;
+        }
         $(function(){
+            var schema = window.location.protocol=='https:' ? 'wss:' : 'ws:';
+            var host =  window.location.host;
+            socket = new ReconnectingWebSocket(schema+"//"+ host+"/email/");
+            socket.onmessage = function(e){
+                var msg = JSON.parse(e.data);
+                if (msg.ret==-1){
+                    layer.msg(msg.message,{time:2000,icon:-1});
+                }
+                else if(msg.ret==0){
+                    layer.msg('发送成功',{time:2000});
+                }
+                $('#send').attr('disabled',false);
+            }
+            socket.onopen = function() {
+                
+            }
+            socket.onclose = function(){
+                console.log('disconnected');
+            }
             $('#send').click(function(){
-                $.ajax({
-                    url:'/email/',
-                    type:'post',
-                    data:$('#EmailForm').serialize(),
-                    success:function(msg){
-                        if (msg.ret==0){
-                            layer.msg(msg.message,{time:2000});
-                        }
-                    }
-                });
+                // $.ajax({
+                //     url:'/email/',
+                //     type:'post',
+                //     data:$('#EmailForm').serialize(),
+                //     success:function(msg){
+                //         if (msg.ret==0){
+                //             layer.msg(msg.message,{time:2000});
+                //         }
+                //     }
+                // });
+                var data = $('#EmailForm').serialize();
+                var jsonObj = conveterParamsToJson(data);
+                socket.send(JSON.stringify(jsonObj));
+                $('#send').attr('disabled',true);
             });
         });
     </script>
